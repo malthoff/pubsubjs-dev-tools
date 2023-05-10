@@ -15,16 +15,23 @@ const props = withDefaults(
   }
 );
 
+function isDefined(data: any) {
+  return data !== null && data !== undefined;
+}
+
 function toggle(key: string) {
   const currentOpenState = openStates.value.get(key);
   openStates.value.set(key, !currentOpenState);
 }
 
 const openStates = ref(
-  new Map(Object.keys(props.data).map((key) => [key, false]))
+  new Map(Object.keys(props.data ?? {}).map((key) => [key, false]))
 );
 
 const objectPreview = computed(() => {
+  if (!props.data) {
+    return;
+  }
   const maxShown = 3;
   const keys = Object.keys(props.data);
   const listOfKeys = keys.filter((key, index) => index < maxShown).join(", ");
@@ -34,6 +41,9 @@ const objectPreview = computed(() => {
 });
 
 function isArrayWithContent(data: unknown): boolean {
+  if (!isDefined(data)) {
+    return false;
+  }
   if (!Array.isArray(data)) {
     return false;
   }
@@ -41,6 +51,9 @@ function isArrayWithContent(data: unknown): boolean {
 }
 
 function isObject(data: any) {
+  if (!isDefined(data)) {
+    return false;
+  }
   return (
     !Array.isArray(data) && typeof data === "object" && Object.keys(data).length
   );
