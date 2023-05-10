@@ -67,7 +67,6 @@ function stopReadingEvents() {
 }
 
 function selectData(data: any) {
-  console.log("selected Data", data);
   selectedData.value = data;
 }
 

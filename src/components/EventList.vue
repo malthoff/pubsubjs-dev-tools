@@ -14,22 +14,12 @@ type ActiveEvent = {
   eventIndex: number;
 };
 
-console.log("Events:", props.events);
-
 const activeEvent: Ref<ActiveEvent | undefined> = ref();
 
 function showDetails(event: any, eventTypeIndex: number, eventIndex: number) {
   activeEvent.value = { eventTypeIndex, eventIndex };
-  console.log("select: ", event);
   emit("select", event.payload);
 }
-
-watch(
-  () => props.events,
-  (newEvents) => {
-    console.log(newEvents);
-  }
-);
 </script>
 
 <template>
