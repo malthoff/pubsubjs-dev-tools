@@ -1,0 +1,20 @@
+:root {
+  --color: rgba(32, 32, 32, 1);
+  --bgColor: white;
+  --highlight-color: #2b7cff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color: rgb(198 204 209);
+    --bgColor: #242424;
+    --highlight-color: #08dd7a;
+  }
+}
+
+html {
+  color-scheme: light dark;
+  color: var(--color);
+  background-color: var(--bgColor);
+  line-height: 1.5;
+}
