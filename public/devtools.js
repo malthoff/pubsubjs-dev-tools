@@ -19,4 +19,10 @@ chrome.devtools.panels.create("PubSubJS", null, "index.html", (panel) => {
       appIsMounted = true;
     }
   });
+
+  chrome.webNavigation.onCompleted.addListener(function (details) {
+    if (details.frameId === 0 && details.frameType === "outermost_frame") {
+      chrome.runtime.sendMessage("pageReloaded");
+    }
+  });
 });

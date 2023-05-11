@@ -3,6 +3,9 @@
   "name": "PubSubJS Dev Tools",
   "description": "Visualizes the cross application communication done via PubSubJS.",
   "version": "1.0",
-  "permissions": ["debugger"],
-  "devtools_page": "devtools.html"
+  "permissions": ["debugger", "webNavigation"],
+  "devtools_page": "devtools.html",
+  "background": {
+    "service_worker": "service-worker.js"
+  }
 }

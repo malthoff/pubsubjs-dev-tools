@@ -11,14 +11,12 @@ declare global {
 }
 
 const isPubSubDefined = ref(false);
-
 let intervalId: number | null = null;
-
 let eventList: Ref<PubSubEvent[]> = ref([]);
-
 const selectedData = ref();
 
 onMounted(async () => {
+  initRunTimeListener();
   checkIsPubSubDefined();
 });
 
@@ -26,6 +24,29 @@ function startPubSubListener() {
   chrome.devtools.inspectedWindow.eval(
     "if(!window.__PubSubContainer) {window.__PubSubContainer = {}}; var mySubscriber = (message, data) => {if(!window.__PubSubContainer[message]){window.__PubSubContainer[message] = []} __PubSubContainer[message].push({timestamp: new Date(), payload: data})};PubSub.subscribeAll(mySubscriber)"
   );
+}
+
+function initRunTimeListener() {
+  chrome.runtime.onMessage.addListener(onDevToolsEvent);
+}
+function removeRuntimeListener() {
+  chrome.runtime.onMessage.removeListener(onDevToolsEvent);
+}
+
+function onDevToolsEvent(message: string) {
+  switch (message) {
+    case "onShow":
+      startReadingEvents();
+      break;
+    case "onHidden":
+      stopReadingEvents();
+      break;
+    case "pageReloaded":
+      startPubSubListener();
+      break;
+    default: {
+    }
+  }
 }
 
 function updateEvents(): void {
@@ -78,7 +99,9 @@ watch(isPubSubDefined, (isPubSubDefined) => {
 });
 
 onBeforeUnmount(() => {
+  alert("unmount");
   stopReadingEvents();
+  removeRuntimeListener();
 });
 </script>
 
